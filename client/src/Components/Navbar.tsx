@@ -3,14 +3,19 @@ import WoorfLogo from "../assets/woorf-logo.svg?react";
 import { FaSearch } from "react-icons/fa";
 import { FaGear, FaCircleInfo } from "react-icons/fa6";
 import { IoHome } from "react-icons/io5";
-
+import { useLocation } from "react-router";
 
 function Navbar() {
+  let location = useLocation
+
+  const alertLocation = () => {
+    alert(location)
+  }
   return (
     <>
       <div className="shadow-lg w-full flex flex-row h-16">
         {/* Logo  */}
-        <a href="" className="btn btn-ghost m-2 justify-center ">
+        <a href="" onClick={alertLocation} className="btn btn-ghost m-2 justify-center ">
           <WoorfLogo id="woorf-logo " className="w-32 h-18" />
         </a>
 
