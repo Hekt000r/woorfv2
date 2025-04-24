@@ -9,6 +9,7 @@ const router = createBrowserRouter([{ path: "/", Component: App }]);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
+    <title>woorf - A fast, no ads software hub.</title>
     <Navbar />
     <RouterProvider router={router}/>
   </StrictMode>
