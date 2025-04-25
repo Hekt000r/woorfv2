@@ -1,9 +1,7 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
-interface Category {
-  name: string;
-}
+interface Category { name: string; }
 interface Program {
   _id: string;
   name: string;
@@ -37,11 +35,8 @@ export default function Categories() {
     fetchData();
   }, []);
 
-  if (loading) {
-    return <div className="p-6">Loading...</div>;
-  }
+  if (loading) return <div className="p-6">Loading...</div>;
 
-  // Group programs by category
   const programsByCategory = categories.reduce<Record<string, Program[]>>((acc, category) => {
     acc[category.name] = programs.filter((p) => p.category === category.name);
     return acc;
@@ -54,21 +49,26 @@ export default function Categories() {
         {categories.map((category) => (
           <div key={category.name} className="mb-8">
             <h2 className="mt-2 font-semibold text-3xl mb-4">{category.name}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div
+              className="flex gap-4 overflow-x-hidden"
+            >
               {programsByCategory[category.name]?.length ? (
                 programsByCategory[category.name].map((program) => (
                   <div
                     key={program._id}
-                    className="border rounded-2xl p-4 shadow hover:shadow-lg transition"
+                    className="flex-shrink-0 border max-w-46 hover:bg-base-300 rounded-2xl flex flex-col items-center cursor-pointer p-4 shadow hover:shadow-lg transition"
+                    style={{ width: '12rem' }}
                   >
                     <img
                       src={program.photoURL}
                       alt={program.displayName}
-                      className="w-full h-32 object-cover rounded-lg mb-4"
+                      className="w-24 h-24 object-cover rounded-lg mb-4"
                     />
-                    <h3 className="text-xl font-medium mb-2">{program.displayName}</h3>
+                    <h3 className="text-xl font-medium mb-1 text-center break-words">
+                      {program.displayName}
+                    </h3>
                     <p className="text-sm text-gray-500 mb-2">By {program.author}</p>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2 justify-center">
                       {Object.entries(program.downloadLinks).map(([label, url]) => (
                         <a
                           key={label}
