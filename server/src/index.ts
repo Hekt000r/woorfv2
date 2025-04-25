@@ -8,6 +8,7 @@
 import { Application, Response, Request } from "express";
 import { Collection } from "mongodb";
 
+const cors = require(`cors`)
 const express = require(`express`)
 const fs = require(`fs`)
 const { MongoClient, ServerApiVersion } = require('mongodb');
@@ -45,6 +46,7 @@ async function run() {
 
 run().catch(console.dir);
 
+app.use(cors())
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Woorf API index page") /* When structure is complete, any non /api/* routes will be handled as client-side routing. */
@@ -57,6 +59,14 @@ app.get("/api/programs", async (req: Request, res: Response) => {
   const programs = await programsCollection.find().toArray()
 
   res.status(200).send(programs)
+})
+/* Get all categories */
+app.get("/api/categories", async (req: Request, res: Response) => {
+  const db = client.db("woorf-db-1")
+  const categoriesCollection: Collection = await db.collection(`Categories`)
+  const categories = await categoriesCollection.find().toArray()
+
+  res.status(200).send(categories)
 })
 
 app.listen(port, () => {
