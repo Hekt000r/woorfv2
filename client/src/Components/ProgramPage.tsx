@@ -1,8 +1,10 @@
 import axios from "axios";
-import { JSX, use, useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment, JSX } from "react";
 import { useParams } from "react-router";
-import { FaTools } from "react-icons/fa";
-import { FaWindows } from "react-icons/fa";
+import { FaTools, FaWindows } from "react-icons/fa";
+import { MdOutlineInstallDesktop } from "react-icons/md";
+import { FaRegFileZipper } from "react-icons/fa6";
+
 interface Program {
   _id: string;
   name: string;
@@ -17,18 +19,24 @@ interface DownloadLink {
   platform: string;
   downloadURL: string;
   label: string;
+  type: string;
 }
 
 function ProgramPage() {
   const [programData, setProgramData] = useState<Program>();
-  const [downloadLinks, setDownloadLinks] = useState<DownloadLink[]>([]);
+  const [groupedLinks, setGroupedLinks] = useState<[string, DownloadLink[]][]>(
+    []
+  );
   const params = useParams<{ name: string }>();
 
   const categoryIconMap: Record<string, JSX.Element> = {
     Utilities: <FaTools />,
+    // add other categories here
   };
-  const platformIconMap: Record<string, JSX.Element> = {
-    Windows: <FaWindows className="w-6 h-6" />,
+
+  const downloadTypeIconMap: Record<string, JSX.Element> = {
+    Installer: <MdOutlineInstallDesktop className="w-6 h-6" />,
+    Portable: <FaRegFileZipper className="w-6 h-6" />,
   };
 
   useEffect(() => {
@@ -38,21 +46,27 @@ function ProgramPage() {
       )
       .then((response) => {
         setProgramData(response.data);
-
-        // Now that Program.downloadLinks is DownloadLink[],
-        // you can just do:
-        setDownloadLinks(response.data.downloadLinks);
-      });
-  }, []);
+        // 1. Group by platform
+        const grouped = response.data.downloadLinks.reduce((acc, link) => {
+          const key = link.platform;
+          if (!acc[key]) acc[key] = [];
+          acc[key].push(link);
+          return acc;
+        }, {} as Record<string, DownloadLink[]>);
+        // 2. Convert to [platform, links[]] pairs
+        setGroupedLinks(Object.entries(grouped));
+      })
+      .catch(console.error);
+  }, [params.name]);
 
   if (!programData) {
-    return <>Loading</>;
+    return <>Loading…</>;
   }
 
   const tabGroupName = `tabs_${programData._id}`;
 
   return (
-    <div className="flex justify-center mt-4">
+    <div className="flex relative justify-center mt-4">
       <div className="shadow-2xl w-[65%] h-[600px] rounded-xl">
         <div className="m-8 flex">
           <img
@@ -60,12 +74,10 @@ function ProgramPage() {
             alt="Program icon"
             className="w-36 shadow-2xl p-4 rounded-2xl"
           />
-          {/* Wrap the text elements in a flex column */}
           <div className="flex flex-col ml-6 mt-4">
             <h1 className="text-montserrat font-medium text-5xl">
               {programData.displayName}
             </h1>
-
             <p className="text-montserrat inline-flex mt-1 text-xl">
               By {programData.author}
             </p>
@@ -77,37 +89,48 @@ function ProgramPage() {
             </p>
           </div>
         </div>
-        <div className="tabs tabs-lift">
-          {downloadLinks.map((link, idx) => (
-            <>
-              {/* Radio input */}
-              <input
-                type="radio"
-                name={tabGroupName}
-                id={`${tabGroupName}_tab_${idx}`}
-                className="tab"
-                defaultChecked={idx === 0}
-                aria-label={link.platform}
-              />
-              {/* Content for this tab */}
-              <div className="tab-content bg-base-100 border-base-300 p-6">
-                <a
-                  href={link.downloadURL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="
+
+
+        <div className="absolute bottom-0">
+        <h2 className="text-montserrat font-medium text-2xl mb-2 ml-2">Download {programData.displayName} v1.4.1.1026</h2>
+          <div className="tabs tabs-lift ">
+            {groupedLinks.map(([platform, links], idx) => (
+              <Fragment key={platform}>
+                {/* Radio input */}
+                <input
+                  type="radio"
+                  name={tabGroupName}
+                  id={`${tabGroupName}_${platform}`}
+                  className="tab"
+                  defaultChecked={idx === 0}
+                  aria-label={platform}
+                />
+
+                {/* Tab content with 2-per-row grid */}
+                <div className="tab-content bg-base-100 border-base-300 p-6">
+                  <div className="grid grid-cols-2 gap-4">
+                    {links.map((link) => (
+                      <a
+                        key={link.downloadURL}
+                        href={link.downloadURL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="
                       inline-flex items-center space-x-2
-                      w-fit p-2 btn shadow-2xl
+                      w-full p-2 btn shadow-2xl
                       text-lg font-normal text-montserrat
                       rounded-xl bg-zinc-300
                     "
-                >
-                  {platformIconMap[link.platform] || null}
-                  <span>{link.label}</span>
-                </a>
-              </div>
-            </>
-          ))}
+                      >
+                        {downloadTypeIconMap[link.type]}
+                        <span>{link.label}</span>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </Fragment>
+            ))}
+          </div>
         </div>
       </div>
     </div>

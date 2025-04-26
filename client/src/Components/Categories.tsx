@@ -69,19 +69,6 @@ export default function Categories() {
                       {program.displayName}
                     </h3>
                     <p className="text-sm text-gray-500 mb-2">By {program.author}</p>
-                    <div className="flex flex-wrap gap-2 justify-center">
-                      {Object.entries(program.downloadLinks).map(([label, url]) => (
-                        <a
-                          key={label}
-                          href={url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-500 hover:underline text-sm"
-                        >
-                          {label}
-                        </a>
-                      ))}
-                    </div>
                   </a>
                 ))
               ) : (
