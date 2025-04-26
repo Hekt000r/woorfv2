@@ -19,7 +19,7 @@ function Navbar() {
     <>
       <div className="shadow-lg w-full flex flex-row h-16">
         {/* Logo  */}
-        <a href="" className="btn btn-ghost m-2 justify-center ">
+        <a href="/" className="btn btn-ghost m-2 justify-center ">
           <WoorfLogo id="woorf-logo " className="w-32 h-18" />
         </a>
 

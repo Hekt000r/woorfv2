@@ -69,6 +69,18 @@ app.get("/api/categories", async (req: Request, res: Response) => {
   res.status(200).send(categories)
 })
 
+/* Get specific program */
+app.get("/api/program", async (req: Request, res: Response) => {
+  const db = client.db("woorf-db-1")
+  const programsCollection: Collection = await db.collection(`Programs`)
+  const programName = req.query.programName
+  const program = await programsCollection.findOne({name: programName})
+  if (!program) {
+    res.status(403).send("Not found")
+  }
+  res.status(200).send(program)
+})
+
 app.listen(port, () => {
   console.log(`Express server live on port ${port}`)
 })

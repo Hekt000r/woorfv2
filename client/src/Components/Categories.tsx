@@ -54,10 +54,11 @@ export default function Categories() {
             >
               {programsByCategory[category.name]?.length ? (
                 programsByCategory[category.name].map((program) => (
-                  <div
+                  <a
                     key={program._id}
                     className="flex-shrink-0 border max-w-46 hover:bg-base-300 rounded-2xl flex flex-col items-center cursor-pointer p-4 shadow hover:shadow-lg transition"
                     style={{ width: '12rem' }}
+                    href={`/program/${program.name}`}
                   >
                     <img
                       src={program.photoURL}
@@ -81,7 +82,7 @@ export default function Categories() {
                         </a>
                       ))}
                     </div>
-                  </div>
+                  </a>
                 ))
               ) : (
                 <p className="text-gray-400">No programs in this category.</p>
