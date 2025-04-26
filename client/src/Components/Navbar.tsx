@@ -3,7 +3,7 @@ import WoorfLogo from "../assets/woorf-logo.svg?react";
 import { FaSearch } from "react-icons/fa";
 import { FaGear, FaCircleInfo } from "react-icons/fa6";
 import { IoHome } from "react-icons/io5";
-
+import { FaTools } from "react-icons/fa";
 
 function Navbar() {
 
