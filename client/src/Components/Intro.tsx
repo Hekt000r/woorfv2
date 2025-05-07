@@ -14,8 +14,8 @@ function Intro() {
         <div className="flex justify-center">
           <WoorfLogo className="mt-4" />
         </div>
-        <h1 className="text-center text-3xl font-semibold">The hub for free and open source software</h1>
-        <p className="text-center text-xl">No ads, no waiting, no malware, instant downloads and access to hundreds of free-and-open-source  programs</p>
+        <h1 className="text-center text-3xl font-semibold text-montserrat">The hub for free and open source software</h1>
+        <p className="text-center text-xl text-montserrat">No ads, no waiting, no malware, instant downloads and access to hundreds of free-and-open-source  programs</p>
 
         <div className="flex justify-center mt-8">
           <a className="flex justify-center items-center btn btn-ghost mr-8 shadow-md rounded-xl" href=""><FaArrowCircleRight className="w-7 h-7 mr-2 " />Learn more</a>
