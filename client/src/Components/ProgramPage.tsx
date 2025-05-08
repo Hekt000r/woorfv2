@@ -92,12 +92,16 @@ function ProgramPage() {
         </div>
 
         <div>
-            <p className="text-montserrat text-lg p-2 ml-4 mr-4">{programData.description}</p>
+          <p className="text-montserrat text-lg p-2 ml-4 mr-4">
+            {programData.description}
+          </p>
         </div>
 
         <div className="absolute bottom-0">
-        <h2 className="text-montserrat font-medium text-2xl mb-2 ml-2">Download {programData.displayName} v1.4.1.1026</h2>
-          <div className="tabs tabs-lift ">
+          <h2 className="text-montserrat font-medium text-2xl mb-2 ml-2">
+            Download {programData.displayName}
+          </h2>
+          <div className="tabs tabs-lift max-w-[90%] ">
             {groupedLinks.map(([platform, links], idx) => (
               <Fragment key={platform}>
                 {/* Radio input */}

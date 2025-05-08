@@ -1,6 +1,7 @@
 /* Imports */
 import { ChangeEvent, FormEvent, useState } from "react";
 import WoorfLogo from "../assets/woorf-logo.svg?react";
+import axios from "axios";
 
 const passkey = import.meta.env.VITE_ADMIN_PASSKEY;
 
@@ -37,6 +38,23 @@ export const AdminDashboard = () => {
         setLabel(val);
         break;
     }
+  };
+
+  const handleDataSubmit = async () => {
+    const data = {
+      progName: progName,
+      downloadURL: downloadURL,
+      platform: platform,
+      type: type,
+      label: label,
+    };
+    alert(data.progName);
+
+    const response = await axios.post(
+      "http://localhost:5174/api/addDownloadLink",
+      data
+    );
+    alert(response);
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -122,6 +140,14 @@ export const AdminDashboard = () => {
               <strong>Platform:</strong> {platform || "—"} <br />
               <strong>Type:</strong> {type || "—"} <br />
             </p>
+            <button
+              onClick={() => {
+                handleDataSubmit();
+              }}
+              className="btn btn-primary"
+            >
+              Submit
+            </button>
           </div>
         </div>
       ) : (
